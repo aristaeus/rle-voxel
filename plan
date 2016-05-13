@@ -5,4 +5,19 @@
 	- meshing
 		- rendering
 - sfml wrapping
-	- rendering
+	- renderintg
+
+
+
+
+- Stage 1
+	create a data structure for one chunk
+		- variable size
+		- 2d
+		- print on screen
+- Stage 2
+	mesh one chunk
+		- sfml
+	convert coords
+- Stage 3
+	store/mesh many chunks
