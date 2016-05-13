@@ -1,4 +1,5 @@
 #include "rle.hpp"
+#include "wrap.hpp"
 
 int main(){
 	rle_chunk chunk(5);
@@ -9,5 +10,8 @@ int main(){
 	chunk.insert(30, 0);
 
 	chunk.print_chunk();
+
+	renderer render;
+	while(render.is_open()) render.draw();
 	return 0;
 }

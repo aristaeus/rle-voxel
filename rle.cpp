@@ -21,13 +21,11 @@ rle_chunk::insert(int coord, int type){
 }
 
 rle_chunk::rle_chunk(int dim){
-	printf("constructing\n");
 	this->voxels = new int_node[dim*dim*dim];
 	this->dim = dim;
 	this->rle_count = 0;
 }
 
 rle_chunk::~rle_chunk(){
-	printf("deleting\n");
 	delete[] this->voxels;
 }
