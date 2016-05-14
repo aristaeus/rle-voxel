@@ -9,8 +9,6 @@ int main(){
 	chunk.insert(20, 3);
 	chunk.insert(30, 0);
 
-	chunk.print_chunk();
-
 	renderer render;
 	while(render.is_open()) render.draw();
 	return 0;

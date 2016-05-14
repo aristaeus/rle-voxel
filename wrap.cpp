@@ -1,8 +1,55 @@
 #include <GL/glew.h>
 
-#include <iostream>
+#include <fstream>
+#include <string>
 
 #include "wrap.hpp"
+
+GLuint load_shader(const char* filename, GLenum type){
+	/* load source into memory */
+	std::fstream file;
+	std::string src_str;
+
+	file.open(filename);
+	std::string line;
+	if(file.is_open()){
+		while(getline(file,line)) src_str += line + '\n';
+	} else printf("error loading %s\n", filename);
+
+	const char* src = src_str.c_str();
+
+	/* pass source to OpenGL */
+	GLuint shad = glCreateShader(type);
+	glShaderSource(shad, 1, &src, NULL);
+	glCompileShader(shad);
+
+	/* check for errors */
+	GLint status = 0;
+	glGetShaderiv(shad, GL_COMPILE_STATUS, &status);
+	if(!status){
+		GLchar error[512];
+		glGetShaderInfoLog(shad, 512, NULL, error);
+    	printf("Shader error: %s\n", error);
+	}
+	
+	return shad;
+}
+
+GLuint load_program(const char* vfile, const char* ffile){
+	/* load shaders */
+	GLuint vshad = load_shader(vfile, GL_VERTEX_SHADER);
+	GLuint fshad = load_shader(ffile, GL_FRAGMENT_SHADER);
+
+	/* create program */
+	GLuint prog = glCreateProgram();
+	glAttachShader(prog, vshad);
+	glAttachShader(prog, fshad);
+	glLinkProgram(prog);
+
+	/* error checking */
+
+	return prog;
+}
 
 renderer::renderer(){
 	run = true;
@@ -12,6 +59,9 @@ renderer::renderer(){
 	// OpenGL stuff
 
 	glewInit();
+
+	prog = load_program("vertex.glsl", "fragment.glsl");
+	glUseProgram(prog);
 	
 	GLfloat vertices[] = {
     	-0.5f, -0.5f, 0.0f,
@@ -19,9 +69,6 @@ renderer::renderer(){
      	 0.0f,  0.5f, 0.0f
 	};
 
-	char* vsrc = "#version 130\n \n in vec3 position; \n \n void main() \n { \n gl_Position = vec4(position.x, position.y, position.z, 1.0); \n }";
-
-	char* fsrc = "#version 130 \n \n out vec4 color;\n \n void main()\n {\n color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n } \n";
 
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -30,33 +77,6 @@ renderer::renderer(){
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	vshad = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vshad, 1, &vsrc, NULL);
-	glCompileShader(vshad);
-	GLint status = 0;
-	glGetShaderiv(vshad, GL_COMPILE_STATUS, &status);
-	if(!status){
-		GLchar infoLog[512];
-		glGetShaderInfoLog(vshad, 512, NULL, infoLog);
-    	std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << "\n";	
-	}
-
-	fshad = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fshad, 1, &fsrc, NULL);
-	glCompileShader(fshad);
-	glGetShaderiv(fshad, GL_COMPILE_STATUS, &status);
-	if(!status){
-		GLchar infoLog[512];
-		glGetShaderInfoLog(fshad, 512, NULL, infoLog);
-    	std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << "\n";	
-	}
-
-	prog = glCreateProgram();
-	glAttachShader(prog, vshad);
-	glAttachShader(prog, fshad);
-	glLinkProgram(prog);
-
-	glUseProgram(prog);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
