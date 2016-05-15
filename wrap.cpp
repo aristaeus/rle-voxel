@@ -109,11 +109,26 @@ void renderer::draw(){
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	// transformation matrix
 	glm::mat4 trans;
-	trans = glm::translate(trans, glm::vec3(0.5,0.5,0.0));
+	trans = glm::translate(trans, glm::vec3(0.0,0.0,0.0));
+
+	// view (camera) matrix
+	glm::mat4 view;
+	view = glm::lookAt(	glm::vec3(0.0,3.0,3.0), // camera pos
+						glm::vec3(0.0,0.0,0.0), // camera target
+						glm::vec3(0.0,1.0,0.0) // camera up
+	);
+
+	// projection matrix
+	glm::mat4 proj;
+	proj = glm::perspective(45.0, 800*1.0/600, 0.1, 100.0);
 
 	GLuint transform = glGetUniformLocation(prog, "transform");
-	glUniformMatrix4fv(transform, 1, GL_FALSE, glm::value_ptr(trans));
+
+	// pass to shader
+	glm::mat4 mvp = proj * view * trans;
+	glUniformMatrix4fv(transform, 1, GL_FALSE, glm::value_ptr(mvp));
 
 	glUseProgram(prog);
 	glBindVertexArray(vao);
