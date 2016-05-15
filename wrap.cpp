@@ -2,7 +2,6 @@
 #include <string>
 
 #include <GL/glew.h>
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -94,6 +93,8 @@ renderer::renderer(){
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
+	// get camera
+	cam = new FPSCam(&window);
 }
 
 void renderer::draw(){
@@ -114,11 +115,7 @@ void renderer::draw(){
 	trans = glm::translate(trans, glm::vec3(0.0,0.0,0.0));
 
 	// view (camera) matrix
-	glm::mat4 view;
-	view = glm::lookAt(	glm::vec3(0.0,3.0,3.0), // camera pos
-						glm::vec3(0.0,0.0,0.0), // camera target
-						glm::vec3(0.0,1.0,0.0) // camera up
-	);
+	glm::mat4 view = cam->get_cam();
 
 	// projection matrix
 	glm::mat4 proj;
@@ -142,4 +139,17 @@ void renderer::draw(){
 bool
 renderer::is_open(){
 	return run;
+}
+
+glm::mat4
+Camera::get_cam(){
+	this->update();
+	return glm::lookAt(pos, target, up);
+}
+
+FPSCam::FPSCam(sf::Window* win){
+	window = win;
+	pos = glm::vec3(0.0,3.0,3.0);
+	target = glm::vec3(0.0,0.0,0.0);
+	up = glm::vec3(0.0,1.0,0.0);
 }
