@@ -1,3 +1,5 @@
+#include <cmath>
+#include <cstdio>
 #include <fstream>
 #include <string>
 
@@ -60,8 +62,15 @@ GLuint load_program(const char* vfile, const char* ffile){
 
 renderer::renderer(){
 	run = true;
-	window.create(sf::VideoMode(800,600), "stuff");
+
+	sf::ContextSettings s;
+	s.antialiasingLevel = 4;
+
+	window.create(sf::VideoMode(800,600), "stuff", sf::Style::Default, s);
 	window.setVerticalSyncEnabled(true);
+
+	s = window.getSettings();
+	printf("GL: %d.%d\nAA: %d\nDB:%d\nSB: %d\n", s.majorVersion, s.minorVersion, s.antialiasingLevel, s.depthBits, s.stencilBits);
 
 	// OpenGL stuff
 
@@ -95,6 +104,10 @@ renderer::renderer(){
 	
 	// get camera
 	cam = new FPSCam(&window);
+}
+
+renderer::~renderer(){
+	delete cam;
 }
 
 void renderer::draw(){
@@ -148,8 +161,44 @@ Camera::get_cam(){
 }
 
 FPSCam::FPSCam(sf::Window* win){
-	window = win;
-	pos = glm::vec3(0.0,3.0,3.0);
+	pos = glm::vec3(0.0,0.0,3.0);
 	target = glm::vec3(0.0,0.0,0.0);
 	up = glm::vec3(0.0,1.0,0.0);
+
+	window = win;
+
+	rotx = 0;
+	roty = 0;
+}
+
+void FPSCam::
+update(){
+	double dt = 0.1;
+
+
+	// update rotation with mouse
+	sf::Vector2i mos = sf::Mouse::getPosition(*window);
+	sf::Mouse::setPosition(sf::Vector2i(0,0), *window);
+
+	rotx -= mos.x/500.0;
+
+	// update position from keyboard input
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+		pos.x += 1*dt*sin(rotx);
+		pos.z += 1*dt*cos(rotx);
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+		pos.x -= 1*dt*sin(rotx);
+		pos.z -= 1*dt*cos(rotx);
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+		pos.x += 1*dt*cos(rotx);
+		pos.z -= 1*dt*sin(rotx);
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+		pos.x -= 1*dt*cos(rotx);
+		pos.z += 1*dt*sin(rotx);
+	}
+
+	target = glm::vec3(pos.x+sin(rotx), pos.y, pos.z+cos(rotx));
 }
