@@ -1,7 +1,10 @@
-#include <GL/glew.h>
-
 #include <fstream>
 #include <string>
+
+#include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "wrap.hpp"
 
@@ -48,6 +51,11 @@ GLuint load_program(const char* vfile, const char* ffile){
 
 	/* error checking */
 
+
+	/* cleanup */
+	glDeleteShader(vshad);
+	glDeleteShader(fshad);
+
 	return prog;
 }
 
@@ -70,17 +78,21 @@ renderer::renderer(){
 	};
 
 
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
 
+	/* gen buffer data */
 	glGenBuffers(1, &this->vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+	/* gen vao */
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	/* index, size of att, type, normalise, stride, offset */
+	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(GLfloat),(GLvoid*)0);
+
 	glEnableVertexAttribArray(0);
-
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
 }
 
@@ -96,6 +108,12 @@ void renderer::draw(){
 	// OpenGL stuff
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glm::mat4 trans;
+	trans = glm::translate(trans, glm::vec3(0.5,0.5,0.0));
+
+	GLuint transform = glGetUniformLocation(prog, "transform");
+	glUniformMatrix4fv(transform, 1, GL_FALSE, glm::value_ptr(trans));
 
 	glUseProgram(prog);
 	glBindVertexArray(vao);

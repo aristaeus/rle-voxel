@@ -20,6 +20,7 @@
 		- sfml
 		- no camera moving
 		- frame limiting?
+		- v[ba]o type?
 	convert coords
 - Stage 3
 	store/mesh many chunks
