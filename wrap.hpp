@@ -31,6 +31,7 @@ class VAO{
     GLuint vbo;
     GLuint vao;
     GLuint uni;
+    int size;
   public:
     void init(GLfloat* vertices, int size, GLuint uniform);
     void draw(glm::mat4 proj);
@@ -47,6 +48,7 @@ class renderer{
     ~renderer();
     void draw();
     bool is_open();
+    void add_mesh(GLfloat* verts, int size);
 };
 
 #endif

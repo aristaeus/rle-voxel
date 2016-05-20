@@ -85,10 +85,7 @@ renderer::renderer(){
          0.0f,  0.5f, 0.0f
     };
 
-
-
-    GLuint transform = glGetUniformLocation(prog, "transform");
-    vao.init(vertices, sizeof(vertices), transform);
+    // add_mesh(vertices, sizeof(vertices));
 
     // get camera
     cam = new FPSCam(&window);
@@ -140,6 +137,12 @@ void renderer::draw(){
 bool
 renderer::is_open(){
     return run;
+}
+
+void
+renderer::add_mesh(GLfloat* verts, int size){
+    GLuint transform = glGetUniformLocation(prog, "transform");
+    vao.init(verts, size, transform);
 }
 
 glm::mat4
@@ -194,11 +197,13 @@ update(){
 void VAO::
 init(GLfloat* vertices, int size, GLuint uniform){
     uni = uniform;
+    this->size = size;
 
     /* gen buffer data */
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, size*sizeof(GLfloat),
+        vertices, GL_STATIC_DRAW);
 
     /* gen vao */
     glGenVertexArrays(1, &vao);
@@ -221,6 +226,6 @@ draw(glm::mat4 proj){
     glUniformMatrix4fv(uni, 1, GL_FALSE, glm::value_ptr(mvp));
 
     glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, size);
     glBindVertexArray(0); 
 }

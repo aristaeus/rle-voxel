@@ -1,6 +1,10 @@
 #ifndef RLE_HPP
 #define RLE_HPP
 
+#include <vector>
+
+#include "wrap.hpp"
+
 struct int_node{
 	int coord;
 	int type;
@@ -16,5 +20,8 @@ class rle_chunk{
 	rle_chunk(int dim);
 	~rle_chunk();
 };
+
+std::vector<GLfloat>
+add_square(double xs, double ys, double zs, double xe, double ye, double ze);
 
 #endif
