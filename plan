@@ -1,23 +1,15 @@
-= rle
+- rle
 	- data structure
 		- rl
 		- type
 	- meshing
 		- rendering
-- sfml wrapping
-	- renderintg
-
-
-
 
 - Stage 2
 	mesh one chunk
-		- v[ba]o type?
 		- time
-		- unlock camera
 	convert coords
 - Stage 3
-	camera controls
 	meshing
 		- normals
 	lighting

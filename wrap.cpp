@@ -87,26 +87,9 @@ renderer::renderer(){
 
 
 
-    /* gen buffer data */
-    GLuint ivao;
-    GLuint vbo;
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    GLuint transform = glGetUniformLocation(prog, "transform");
+    vao.init(vertices, sizeof(vertices), transform);
 
-    /* gen vao */
-    glGenVertexArrays(1, &ivao);
-    glBindVertexArray(ivao);
-
-    /* index, size of att, type, normalise, stride, offset */
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(GLfloat),(GLvoid*)0);
-
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    vao.vao = ivao;
-    vao.vbo = vbo;
-    
     // get camera
     cam = new FPSCam(&window);
 }
@@ -147,10 +130,9 @@ void renderer::draw(){
 
     glm::mat4 mvp = proj * view;
 
-    GLuint transform = glGetUniformLocation(prog, "transform");
 
     glUseProgram(prog);
-    vao.draw(mvp, transform);
+    vao.draw(mvp);
 
     window.display();
 }
@@ -210,13 +192,33 @@ update(){
 }
 
 void VAO::
-draw(glm::mat4 proj, GLuint uniform){
+init(GLfloat* vertices, int size, GLuint uniform){
+    uni = uniform;
+
+    /* gen buffer data */
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+
+    /* gen vao */
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    /* index, size of att, type, normalise, stride, offset */
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(GLfloat),(GLvoid*)0);
+
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void VAO::
+draw(glm::mat4 proj){
     glm::mat4 trans;
     trans = glm::translate(trans, glm::vec3(0.0,0.0,0.0));
     
     // mvp stuff
     glm::mat4 mvp = proj * trans;
-    glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr(mvp));
+    glUniformMatrix4fv(uni, 1, GL_FALSE, glm::value_ptr(mvp));
 
     glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, 0, 3);

@@ -28,10 +28,12 @@ class FPSCam: public Camera{
 };
 
 class VAO{
-  public:
     GLuint vbo;
     GLuint vao;
-    void draw(glm::mat4 proj, GLuint uniform);
+    GLuint uni;
+  public:
+    void init(GLfloat* vertices, int size, GLuint uniform);
+    void draw(glm::mat4 proj);
 };
 
 class renderer{
