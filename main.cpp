@@ -10,11 +10,13 @@ int main(){
 	chunk.insert(30, 0);
 
 	renderer render;
-	std::vector<GLfloat> verts = add_square(-1, -1, -1, 1, -1, 1);
-	std::vector<GLfloat> verts2 = add_square(-1, -1, -1, 1, 1, -1);
+	std::vector<glm::vec3> verts = add_square(-1, -1, -1, 1, -1, 1);
+	std::vector<glm::vec3> verts2 = add_square(-1, -1, -1, 1, 1, -1);
+	std::vector<glm::vec3> verts3 = add_square(-1, -1, -1, -1, 1, 1);
 	verts.insert(verts.begin(), verts2.begin(), verts2.end());
+	verts.insert(verts.begin(), verts3.begin(), verts3.end());
 
-	render.add_mesh(verts.data(), verts.size());
+	render.add_mesh((GLfloat*)verts.data(), 3*verts.size());
 	while(render.is_open()) render.draw();
 	return 0;
 }

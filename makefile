@@ -6,4 +6,3 @@ CXXFLAGS=-g -Wall
 
 all: $(OBJ)
 	$(CC) $(OBJ) $(LIB) -o $(OUT)
-	rm *.o
