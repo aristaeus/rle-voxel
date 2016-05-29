@@ -65,6 +65,7 @@ renderer::renderer(){
 
     sf::ContextSettings s;
     s.antialiasingLevel = 4;
+    s.depthBits = 24;
 
     window.create(sf::VideoMode(800,600), "stuff", sf::Style::Default, s);
     window.setVerticalSyncEnabled(true);
@@ -79,6 +80,7 @@ renderer::renderer(){
     prog = load_program("vertex.glsl", "fragment.glsl");
     glUseProgram(prog);
     
+    glEnable(GL_DEPTH_TEST);
 
     // get camera
     cam = new FPSCam(&window);
@@ -204,8 +206,10 @@ init(GLfloat* vertices, int size, GLuint uniform){
 
     /* index, size of att, type, normalise, stride, offset */
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,6*sizeof(GLfloat),(GLvoid*)0);
+    glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,6*sizeof(GLfloat),(GLvoid*)sizeof(glm::vec3));
 
     glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
