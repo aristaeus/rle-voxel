@@ -24,4 +24,6 @@ class rle_chunk{
 std::vector<glm::vec3>
 add_square(double xs, double ys, double zs, double xe, double ye, double ze);
 
+std::vector<glm::vec3> add_cube(double x, double y, double z);
+
 #endif
