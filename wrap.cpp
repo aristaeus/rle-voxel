@@ -167,6 +167,14 @@ update(){
     sf::Mouse::setPosition(sf::Vector2i(400,300), *window);
 
     rotx -= (mos.x-400)/500.0;
+    roty -= (mos.y-300)/500.0;
+
+    if(roty > 3.14159/2){
+        roty = 3.14159/2;
+    }
+    if(roty < -3.14159/2){
+        roty = -3.14159/2;
+    }
 
     // update position from keyboard input
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
@@ -185,8 +193,14 @@ update(){
         pos.x -= 1*dt*cos(rotx);
         pos.z += 1*dt*sin(rotx);
     }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
+        pos.y += 0.1;
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)){
+        pos.y -= 0.1;
+    }
 
-    target = glm::vec3(pos.x+sin(rotx), pos.y, pos.z+cos(rotx));
+    target = glm::vec3(pos.x+sin(rotx), pos.y+sin(roty), pos.z+cos(rotx));
 }
 
 void VAO::
