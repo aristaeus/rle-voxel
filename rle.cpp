@@ -68,3 +68,22 @@ add_square(double xs, double ys, double zs, double xe, double ye, double ze){
 
     return mesh;
 }
+
+std::vector<glm::vec3>
+add_cube(double x, double y, double z){
+    double r = 0.5;
+    
+	std::vector<glm::vec3> verts = add_square(x+r, y-r, z+r, x-r, y-r, z-r);
+	std::vector<glm::vec3> verts2 = add_square(x-r, y-r, z-r, x+r, y+r, z-r);
+	std::vector<glm::vec3> verts3 = add_square(x-r, y-r, z-r, x-r, y+r, z+r);
+	std::vector<glm::vec3> verts4 = add_square(x-r, y+r, z-r, x+r, y+r, z+r);
+	std::vector<glm::vec3> verts5 = add_square(x-r, y-r, z+r, x+r, y+r, z+r);
+	std::vector<glm::vec3> verts6 = add_square(x+r, y-r, z-r, x+r, y+r, z+r);
+	verts.insert(verts.begin(), verts2.begin(), verts2.end());
+	verts.insert(verts.begin(), verts3.begin(), verts3.end());
+	verts.insert(verts.begin(), verts4.begin(), verts4.end());
+	verts.insert(verts.begin(), verts5.begin(), verts5.end());
+	verts.insert(verts.begin(), verts6.begin(), verts6.end());
+
+	return verts;
+}
