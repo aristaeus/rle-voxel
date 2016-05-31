@@ -17,6 +17,10 @@ class rle_chunk{
   public:
 	void print_chunk();
 	void insert(int coord, int type);
+	int  coord_conv(glm::vec3 in);
+	glm::vec3 coord_conv(int in);
+	std::vector<glm::vec3> naive_mesh();
+	int get_type(int i);
 	rle_chunk(int dim);
 	~rle_chunk();
 };

@@ -30,6 +30,43 @@ rle_chunk::~rle_chunk(){
 	delete[] this->voxels;
 }
 
+int
+rle_chunk::coord_conv(glm::vec3 in){
+    return in.x + in.y * dim + in.z *dim*dim;
+}
+
+glm::vec3
+rle_chunk::coord_conv(int in){
+    int x = in%dim;
+    int y = ((in-x)%(dim*dim))/dim;
+    int z = ((in-x-y)%(dim*dim*dim)/(dim*dim));
+    return glm::vec3(x,y,z);
+}
+
+int
+rle_chunk::get_type(int i){
+    for(int j = 0; j < rle_count; j++){
+        if(voxels[j].coord > i){
+            return voxels[j-1].type;
+        }
+    }
+    return voxels[rle_count].type;
+}
+
+std::vector<glm::vec3>
+rle_chunk::naive_mesh(){
+    std::vector<glm::vec3> verts;
+    for(int i = 0; i < dim*dim*dim; i++){
+        if(get_type(i) != 0){
+            printf("i = %d\n", i);
+            glm::vec3 coord = coord_conv(i);
+            std::vector<glm::vec3> cube = add_cube(coord.x, coord.y, coord.z);
+	        verts.insert(verts.begin(), cube.begin(), cube.end());
+        }
+    }
+    return verts;
+}
+
 std::vector<glm::vec3>
 add_square(double xs, double ys, double zs, double xe, double ye, double ze){
     std::vector<glm::vec3> mesh;
