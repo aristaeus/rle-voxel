@@ -43,25 +43,41 @@ rle_chunk::coord_conv(int in){
     return glm::vec3(x,y,z);
 }
 
-int
-rle_chunk::get_type(int i){
+int_node
+rle_chunk::get_rle(int i){
     for(int j = 0; j < rle_count; j++){
         if(voxels[j].coord > i){
-            return voxels[j-1].type;
+            return voxels[j-1];
         }
     }
-    return voxels[rle_count].type;
+    return voxels[rle_count];
 }
 
 std::vector<glm::vec3>
 rle_chunk::naive_mesh(){
     std::vector<glm::vec3> verts;
     for(int i = 0; i < dim*dim*dim; i++){
-        if(get_type(i) != 0){
-            printf("i = %d\n", i);
+        if(get_rle(i).type != 0){
             glm::vec3 coord = coord_conv(i);
             std::vector<glm::vec3> cube = add_cube(coord.x, coord.y, coord.z);
 	        verts.insert(verts.begin(), cube.begin(), cube.end());
+        }
+    }
+    return verts;
+}
+
+std::vector<glm::vec3>
+rle_chunk::less_naive(){
+    std::vector<glm::vec3> verts;
+    for(int i = 0; i < rle_count; i++){
+        if(voxels[i].type != 0){
+            glm::vec3 coord1 = coord_conv(voxels[i].coord);
+            glm::vec3 coord2;
+            if(voxels[i+1].coord/5 > voxels[i].coord/5){
+                
+            } else {
+                
+            }
         }
     }
     return verts;

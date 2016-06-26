@@ -20,7 +20,8 @@ class rle_chunk{
 	int  coord_conv(glm::vec3 in);
 	glm::vec3 coord_conv(int in);
 	std::vector<glm::vec3> naive_mesh();
-	int get_type(int i);
+	std::vector<glm::vec3> less_naive();
+	int_node get_rle(int i);
 	rle_chunk(int dim);
 	~rle_chunk();
 };
