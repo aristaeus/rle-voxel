@@ -141,12 +141,16 @@ add_cube(double x, double y, double z){
 }
 
 std::vector<glm::vec3>
-add_square(glm::vec3 a, glm::vec3 b, glm::vec3 c){
-    std::vector<glm::vec3> mesh;
+add_square(glm::vec3 a, glm::vec3 b, glm::vec3 c, glm::vec3 d){
+    // takes four coplanar points and makes a square between them
 
+    std::vector<glm::vec3> mesh;
     glm::vec3 ac = c - a;
     glm::vec3 ab = b - a;
-    glm::vec3 normal = glm::normalize(glm::cross(ab, ac));
+    glm::vec3 normal = -glm::normalize(glm::cross(ab, ac));
+    // normal.x = fabs(normal.x);
+    // normal.y = fabs(normal.y);
+    // normal.z = fabs(normal.z);
 
     mesh.push_back(a);
     mesh.push_back(normal);
@@ -154,11 +158,11 @@ add_square(glm::vec3 a, glm::vec3 b, glm::vec3 c){
     mesh.push_back(normal);
     mesh.push_back(c);
     mesh.push_back(normal);
-    mesh.push_back(b);
-    mesh.push_back(normal);
     mesh.push_back(c);
     mesh.push_back(normal);
-    mesh.push_back(b+ac);
+    mesh.push_back(d);
+    mesh.push_back(normal);
+    mesh.push_back(a);
     mesh.push_back(normal);
 
     return mesh;
@@ -175,14 +179,15 @@ gen_volume(glm::vec3 a, glm::vec3 b){
     glm::vec3 d = a + glm::vec3(0,dy,0);
     glm::vec3 e = a + glm::vec3(0,0,dz);
     glm::vec3 f = a + glm::vec3(dx,0,dz);
-    glm::vec3 g = a + glm::vec3(0,dy,dz);
+    glm::vec3 g = a + glm::vec3(dx,dy,0);
+    glm::vec3 h = a + glm::vec3(0,dy,dz);
 
-    std::vector<glm::vec3> s0 = add_square(a,c,e);
-    std::vector<glm::vec3> s1 = add_square(a,c,d);
-    std::vector<glm::vec3> s2 = add_square(a,d,e);
-    std::vector<glm::vec3> s3 = add_square(b,c,f);
-    std::vector<glm::vec3> s4 = add_square(b,d,g);
-    std::vector<glm::vec3> s5 = add_square(b,f,e);
+    std::vector<glm::vec3> s0 = add_square(a,d,h,e);
+    std::vector<glm::vec3> s1 = add_square(a,c,f,e);
+    std::vector<glm::vec3> s2 = add_square(a,c,g,d);
+    std::vector<glm::vec3> s3 = add_square(b,f,c,g);
+    std::vector<glm::vec3> s4 = add_square(b,f,e,h);
+    std::vector<glm::vec3> s5 = add_square(b,g,d,h);
 
     mesh.insert(mesh.end(),s0.begin(),s0.end());
     mesh.insert(mesh.end(),s1.begin(),s1.end());
