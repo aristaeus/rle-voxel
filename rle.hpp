@@ -48,7 +48,7 @@ std::vector<glm::vec3>
 add_square(double xs, double ys, double zs, double xe, double ye, double ze);
 
 // new square function
-std::vector<glm::vec3> add_square(glm::vec3 a, glm::vec3 b, glm::vec3 c, glm::vec3 d);
+std::vector<glm::vec3> add_square(glm::vec3 a, glm::vec3 b, glm::vec3 c);
 
 // generate a volume between two points
 std::vector<glm::vec3> gen_volume(glm::vec3 a, glm::vec3 b);

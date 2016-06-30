@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <iostream>
 
 #include "rle.hpp"
 
@@ -69,15 +70,22 @@ rle_chunk::naive_mesh(){
 std::vector<glm::vec3>
 rle_chunk::less_naive(){
     std::vector<glm::vec3> verts;
-    for(int i = 0; i < rle_count; i++){
+    for(int i = 0; i < rle_count-1; i++){
         if(voxels[i].type != 0){
-            // glm::vec3 coord1 = coord_conv(voxels[i].coord);
-            // glm::vec3 coord2;
-            if(voxels[i+1].coord/5 > voxels[i].coord/5){
-                
-            } else {
-                
+            int_node curr = voxels[i];
+            int_node next = voxels[i+1];
+            while(next.coord/dim > curr.coord/dim){
+                // continues on to the next one
+                std::vector<glm::vec3> vol = gen_volume(
+                        coord_conv(curr.coord),
+                        coord_conv(curr.coord/dim*dim)+glm::vec3(dim,1,1));
+                verts.insert(verts.end(),vol.begin(),vol.end());
+                curr.coord = curr.coord/dim*dim+dim;
             }
+            std::vector<glm::vec3> vol = gen_volume(
+                    coord_conv(curr.coord),
+                    coord_conv(next.coord)+glm::vec3(0,1,1));
+            verts.insert(verts.end(),vol.begin(),vol.end());
         }
     }
     return verts;
@@ -194,5 +202,4 @@ gen_volume(glm::vec3 a, glm::vec3 b){
     mesh.insert(mesh.end(),s4.begin(),s4.end());
     mesh.insert(mesh.end(),s5.begin(),s5.end());
 
-    return mesh;
-}
+    return mesh; }

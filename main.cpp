@@ -1,8 +1,10 @@
+#include <iostream>
+
 #include "rle.hpp"
 #include "wrap.hpp"
 
 int main(){
-	rle_chunk chunk(5);
+	rle_chunk chunk(4);
 	chunk.insert(0, 0);
 	chunk.insert(1, 1);
 	chunk.insert(5, 0);
@@ -15,18 +17,10 @@ int main(){
 
 	renderer render;
 
-    std::vector<glm::vec3> verts = chunk.naive_mesh();
+    std::vector<glm::vec3> verts = chunk.less_naive();
 
-    std::vector<glm::vec3> volume = gen_volume(glm::vec3(-2.0,0.0,0.0),
-            glm::vec3(1.0,5.0,1.0));
+	render.add_mesh((GLfloat*)verts.data(), 3*verts.size());
 
-	// render.add_mesh((GLfloat*)verts.data(), 3*verts.size());
-    render.add_mesh((GLfloat*)volume.data(), 3*volume.size());
-
-	for(int i = 0; i < 5; i++){
-	    glm::vec3 c= chunk.coord_conv(i);
-	    // printf("int: %d, float: %f, %f, %f\n", i, c.x, c.y, c.z);
-	}
 	while(render.is_open()) render.draw();
 	return 0;
 }
