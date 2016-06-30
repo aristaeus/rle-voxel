@@ -147,10 +147,7 @@ add_square(glm::vec3 a, glm::vec3 b, glm::vec3 c, glm::vec3 d){
     std::vector<glm::vec3> mesh;
     glm::vec3 ac = c - a;
     glm::vec3 ab = b - a;
-    glm::vec3 normal = -glm::normalize(glm::cross(ab, ac));
-    // normal.x = fabs(normal.x);
-    // normal.y = fabs(normal.y);
-    // normal.z = fabs(normal.z);
+    glm::vec3 normal = glm::normalize(glm::cross(ab, ac));
 
     mesh.push_back(a);
     mesh.push_back(normal);
@@ -182,10 +179,11 @@ gen_volume(glm::vec3 a, glm::vec3 b){
     glm::vec3 g = a + glm::vec3(dx,dy,0);
     glm::vec3 h = a + glm::vec3(0,dy,dz);
 
-    std::vector<glm::vec3> s0 = add_square(a,d,h,e);
-    std::vector<glm::vec3> s1 = add_square(a,c,f,e);
-    std::vector<glm::vec3> s2 = add_square(a,c,g,d);
-    std::vector<glm::vec3> s3 = add_square(b,f,c,g);
+    // some of these need to be reversed to make normals correct
+    std::vector<glm::vec3> s0 = add_square(e,h,d,a);
+    std::vector<glm::vec3> s1 = add_square(e,f,c,a);
+    std::vector<glm::vec3> s2 = add_square(d,g,c,a);
+    std::vector<glm::vec3> s3 = add_square(g,c,f,b);
     std::vector<glm::vec3> s4 = add_square(b,f,e,h);
     std::vector<glm::vec3> s5 = add_square(b,g,d,h);
 

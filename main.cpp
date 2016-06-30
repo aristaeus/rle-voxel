@@ -17,14 +17,10 @@ int main(){
 
     std::vector<glm::vec3> verts = chunk.naive_mesh();
 
-    std::vector<glm::vec3> volume = gen_volume(glm::vec3(0.0,0.0,0.0),
-            glm::vec3(1.0,1.0,1.0));
+    std::vector<glm::vec3> volume = gen_volume(glm::vec3(-2.0,0.0,0.0),
+            glm::vec3(1.0,5.0,1.0));
 
 	// render.add_mesh((GLfloat*)verts.data(), 3*verts.size());
-    printf("size: %d\n", volume.size());
-    for(int i = 0; i < volume.size(); i++){
-        printf("x: %lf y: %lf z %lf\n", volume[i].x,volume[i].y,volume[i].z);
-    }
     render.add_mesh((GLfloat*)volume.data(), 3*volume.size());
 
 	for(int i = 0; i < 5; i++){
