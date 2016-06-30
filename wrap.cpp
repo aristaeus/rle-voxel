@@ -237,6 +237,6 @@ draw(glm::mat4 proj){
     glUniformMatrix4fv(uni, 1, GL_FALSE, glm::value_ptr(mvp));
 
     glBindVertexArray(vao);
-    glDrawArrays(GL_LINE_STRIP, 0, size);
+    glDrawArrays(GL_TRIANGLES, 0, size);
     glBindVertexArray(0); 
 }
