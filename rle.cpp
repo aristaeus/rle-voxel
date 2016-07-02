@@ -27,6 +27,33 @@ rle_chunk::rle_chunk(int dim){
 	this->rle_count = 0;
 }
 
+rle_chunk::rle_chunk(int* array, int dim){
+    voxels = new int_node[dim*dim*dim];
+    this->dim = dim;
+    rle_count = 0;
+
+    int_node curr = {0, array[0]};
+    voxels[rle_count++] = curr;
+
+    for(int i = 1; i < dim*dim*dim; i++){
+        
+        if(array[i] == curr.type)
+            continue;
+
+        // std::cout<<"new run at: "<<i<<"\n";
+        curr.coord = i;
+        curr.type = array[i];
+        voxels[rle_count++] = curr;
+    }
+
+    if(curr.coord != 0) voxels[rle_count++] = curr;
+
+    // add a "null terminating run"
+    curr.coord = dim*dim*dim;
+    curr.type = 0;
+    voxels[rle_count++] = curr;
+}
+
 rle_chunk::~rle_chunk(){
 	delete[] this->voxels;
 }
@@ -69,8 +96,8 @@ rle_chunk::less_naive(){
                 // continues on to the next one
                 // gen volume filling to end of the row
                 std::vector<glm::vec3> vol = gen_volume(
-                        coord_conv(curr.coord),
-                        coord_conv(curr.coord/dim*dim)+glm::vec3(dim-1,0,0));
+                    coord_conv(curr.coord),
+                    coord_conv(curr.coord/dim*dim)+glm::vec3(dim-1,0,0));
                 verts.insert(verts.end(),vol.begin(),vol.end());
 
                 // set coord to the start of next row
@@ -82,8 +109,8 @@ rle_chunk::less_naive(){
 
             // generate remaining volume
             std::vector<glm::vec3> vol = gen_volume(
-                    coord_conv(curr.coord),
-                    coord_conv(next.coord)-glm::vec3(1,0,0));
+                coord_conv(curr.coord),
+                coord_conv(next.coord)-glm::vec3(1,0,0));
             verts.insert(verts.end(),vol.begin(),vol.end());
         }
         // needs to still do something about final node

@@ -27,9 +27,6 @@ class rle_chunk{
 	// convert an int ID into a vector coord
 	glm::vec3 coord_conv(int in);
 
-	// extremely basic meshing
-	std::vector<glm::vec3> naive_mesh();
-
 	// slightly less basic meshing
 	std::vector<glm::vec3> less_naive();
 
@@ -38,22 +35,16 @@ class rle_chunk{
 
     // constructors and stuff
 	rle_chunk(int dim);
+	rle_chunk(int* array, int dim);
 	~rle_chunk();
 };
 
-// add a square between point a and point b
-// this really needs another vector I think
-// Or a normal or something
+// does what it says on the tin
 std::vector<glm::vec3>
-add_square(double xs, double ys, double zs, double xe, double ye, double ze);
-
-// new square function
-std::vector<glm::vec3> add_square(glm::vec3 a, glm::vec3 b, glm::vec3 c);
+add_square(glm::vec3 a, glm::vec3 b, glm::vec3 c, glm::vec3 d);
 
 // generate a volume between two points
-std::vector<glm::vec3> gen_volume(glm::vec3 a, glm::vec3 b);
-
-// create a cube between points *s and *e (DEPRECATED)
-std::vector<glm::vec3> add_cube(double x, double y, double z);
+std::vector<glm::vec3>
+gen_volume(glm::vec3 a, glm::vec3 b);
 
 #endif
