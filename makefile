@@ -1,6 +1,6 @@
 CC=g++
 OUT=vox
-FILE=wrap rle main
+FILE=wrap rle main world
 LIB=-lsfml-window -lsfml-system -lGL -lGLEW
 CXXFLAGS=-g -Wall
 BUILDIR=build/
@@ -17,4 +17,4 @@ build/%.o: src/%.cpp
 	$(CC) $(CXXFLAGS) -c -o  $@ $< -I$(INCDIR)
 
 clean:
-	rm -f $(BUILDIR)*
+	rm -rf $(BUILDIR)*

@@ -15,6 +15,9 @@ class rle_chunk{
 	int rle_count;
 	int_node* voxels;
   public:
+    void init(int* array, int dim);
+
+
     // print chunk info to stdout
 	void print_chunk();
 
@@ -34,6 +37,7 @@ class rle_chunk{
 	int_node get_rle(int i);
 
     // constructors and stuff
+	rle_chunk();
 	rle_chunk(int dim);
 	rle_chunk(int* array, int dim);
 	~rle_chunk();

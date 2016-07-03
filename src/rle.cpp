@@ -21,6 +21,9 @@ rle_chunk::insert(int coord, int type){
 	rle_count++;
 }
 
+rle_chunk::rle_chunk(){
+}
+
 rle_chunk::rle_chunk(int dim){
 	this->voxels = new int_node[dim*dim*dim];
 	this->dim = dim;
@@ -28,6 +31,15 @@ rle_chunk::rle_chunk(int dim){
 }
 
 rle_chunk::rle_chunk(int* array, int dim){
+    init(array,dim);
+}
+
+rle_chunk::~rle_chunk(){
+	delete[] this->voxels;
+}
+
+void
+rle_chunk::init(int* array, int dim){
     voxels = new int_node[dim*dim*dim];
     this->dim = dim;
     rle_count = 0;
@@ -53,11 +65,6 @@ rle_chunk::rle_chunk(int* array, int dim){
     curr.type = 0;
     voxels[rle_count++] = curr;
 }
-
-rle_chunk::~rle_chunk(){
-	delete[] this->voxels;
-}
-
 int
 rle_chunk::coord_conv(glm::vec3 in){
     return in.x + in.y * dim + in.z *dim*dim;
