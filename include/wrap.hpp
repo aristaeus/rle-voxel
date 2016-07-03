@@ -1,12 +1,12 @@
 #ifndef WRAP_HPP
 #define WRAP_HPP
 
+#include <vector>
+
 #include <SFML/OpenGL.hpp>
 #include <SFML/Window.hpp>
 
 #include <glm/glm.hpp>
-
-#include <vector>
 
 class Camera{   // Camera for OpenGL
   protected:
@@ -40,15 +40,15 @@ class VAO{
     void draw(glm::mat4 proj);
 };
 
-class renderer{
+class Renderer{
     sf::Window window;
     Camera* cam;
     bool run;
     GLuint prog;
     std::vector<VAO> vaos;
   public:
-    renderer();
-    ~renderer();
+    Renderer();
+    ~Renderer();
     void draw();
     bool is_open();
     void add_mesh(GLfloat* verts, int size, glm::vec3 pos);

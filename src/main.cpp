@@ -5,10 +5,10 @@
 #include "wrap.hpp"
 
 int main(){
-	renderer render;
+	Renderer render;
 
 	World world;
-	world.init(&render);
+	world.init(&render, 3);
 
 	while(render.is_open()) render.draw();
 	return 0;

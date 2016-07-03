@@ -60,7 +60,7 @@ GLuint load_program(const char* vfile, const char* ffile){
     return prog;
 }
 
-renderer::renderer(){
+Renderer::Renderer(){
     run = true;
 
     sf::ContextSettings s;
@@ -86,11 +86,11 @@ renderer::renderer(){
     cam = new FPSCam(&window);
 }
 
-renderer::~renderer(){
+Renderer::~Renderer(){
     delete cam;
 }
 
-void renderer::draw(){
+void Renderer::draw(){
     sf::Event event;
     while(window.pollEvent(event)){
         if(event.type == sf::Event::Closed){
@@ -132,12 +132,12 @@ void renderer::draw(){
 }
 
 bool
-renderer::is_open(){
+Renderer::is_open(){
     return run;
 }
 
 void
-renderer::add_mesh(GLfloat* verts, int size, glm::vec3 pos){
+Renderer::add_mesh(GLfloat* verts, int size, glm::vec3 pos){
     GLuint transform = glGetUniformLocation(prog, "transform");
     VAO vao;
     vao.init(verts, size, transform, pos);

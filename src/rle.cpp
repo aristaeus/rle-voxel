@@ -4,7 +4,7 @@
 #include "rle.hpp"
 
 void
-rle_chunk::print_chunk(){
+RLEChunk::print_chunk(){
 	for(int i = 0, count = 0; i < dim*dim; i++){
 		if(i == voxels[count+1].coord){
 			count++;
@@ -15,36 +15,39 @@ rle_chunk::print_chunk(){
 }
 
 void
-rle_chunk::insert(int coord, int type){
+RLEChunk::insert(int coord, int type){
 	voxels[rle_count].coord = coord;
 	voxels[rle_count].type = type;
 	rle_count++;
 }
 
-rle_chunk::rle_chunk(){
+RLEChunk::RLEChunk(){
+    this->voxels = NULL;
+    rle_count = 0;
+    dim = 0;
 }
 
-rle_chunk::rle_chunk(int dim){
-	this->voxels = new int_node[dim*dim*dim];
+RLEChunk::RLEChunk(int dim){
+	this->voxels = new IntervalNode[dim*dim*dim];
 	this->dim = dim;
 	this->rle_count = 0;
 }
 
-rle_chunk::rle_chunk(int* array, int dim){
+RLEChunk::RLEChunk(int* array, int dim){
     init(array,dim);
 }
 
-rle_chunk::~rle_chunk(){
+RLEChunk::~RLEChunk(){
 	delete[] this->voxels;
 }
 
 void
-rle_chunk::init(int* array, int dim){
-    voxels = new int_node[dim*dim*dim];
+RLEChunk::init(int* array, int dim){
+    voxels = new IntervalNode[dim*dim*dim];
     this->dim = dim;
     rle_count = 0;
 
-    int_node curr = {0, array[0]};
+    IntervalNode curr = {0, array[0]};
     voxels[rle_count++] = curr;
 
     for(int i = 1; i < dim*dim*dim; i++){
@@ -66,20 +69,20 @@ rle_chunk::init(int* array, int dim){
     voxels[rle_count++] = curr;
 }
 int
-rle_chunk::coord_conv(glm::vec3 in){
+RLEChunk::coord_conv(glm::vec3 in){
     return in.x + in.y * dim + in.z *dim*dim;
 }
 
 glm::vec3
-rle_chunk::coord_conv(int in){
+RLEChunk::coord_conv(int in){
     int x = in%dim;
     int y = ((in-x)%(dim*dim))/dim;
     int z = ((in-x-y)%(dim*dim*dim)/(dim*dim));
     return glm::vec3(x,y,z);
 }
 
-int_node
-rle_chunk::get_rle(int i){
+IntervalNode
+RLEChunk::get_rle(int i){
     for(int j = 0; j < rle_count; j++){
         if(voxels[j].coord > i){
             return voxels[j-1];
@@ -89,14 +92,14 @@ rle_chunk::get_rle(int i){
 }
 
 std::vector<glm::vec3>
-rle_chunk::less_naive(){
+RLEChunk::less_naive(){
     std::vector<glm::vec3> verts;
     for(int i = 0; i < rle_count-1; i++){
         if(voxels[i].type != 0){
 
             // copies needed for safe modification
-            int_node curr = voxels[i];
-            int_node next = voxels[i+1];
+            IntervalNode curr = voxels[i];
+            IntervalNode next = voxels[i+1];
 
             while(next.coord/dim > curr.coord/dim){
 

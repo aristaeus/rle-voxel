@@ -5,15 +5,15 @@
 
 #include "wrap.hpp"
 
-struct int_node{
+struct IntervalNode{
 	int coord;
 	int type;
 };
 
-class rle_chunk{
+class RLEChunk{
 	int dim;
 	int rle_count;
-	int_node* voxels;
+	IntervalNode* voxels;
   public:
     void init(int* array, int dim);
 
@@ -34,13 +34,13 @@ class rle_chunk{
 	std::vector<glm::vec3> less_naive();
 
 	// get a run length at an ID
-	int_node get_rle(int i);
+	IntervalNode get_rle(int i);
 
     // constructors and stuff
-	rle_chunk();
-	rle_chunk(int dim);
-	rle_chunk(int* array, int dim);
-	~rle_chunk();
+	RLEChunk();
+	RLEChunk(int dim);
+	RLEChunk(int* array, int dim);
+	~RLEChunk();
 };
 
 // does what it says on the tin

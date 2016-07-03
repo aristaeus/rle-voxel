@@ -4,10 +4,11 @@
 #include "rle.hpp"
 
 class World{
-    rle_chunk chunks [16];
+    RLEChunk chunks [16];
+    int dim;
 
     public:
-    void init(renderer* render);
+    void init(Renderer* render, int dim);
 };
 
 #endif
