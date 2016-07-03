@@ -1,1 +1,16 @@
+README v0.0
+
+# <name>
+
+## Introduction
+
 This is a voxel engine, using RLE to encode voxels. It's mostly experimental, but it might end up going somewhere.
+
+## Requirements
+
+SFML
+libnoise
+
+## Usage
+
+<name> uses modular system of loosely coupled components. Specific documentation for each of these can be found in <location>.

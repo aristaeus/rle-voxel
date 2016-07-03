@@ -1,0 +1,21 @@
+# rle
+
+rle.* contains code relating to the RLE system used for storing a processing voxels in <name>.
+
+## Classes
+
+### int_node
+#### Description
+Represents a single interval node. I *really* need to come up with better names. Also better code.
+
+### Data members
+int coord
+The starting coordinate of the interval
+
+int type
+The type of the voxel.
+
+### Functions
+none
+
+...
