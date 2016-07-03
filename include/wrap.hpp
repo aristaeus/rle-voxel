@@ -6,6 +6,8 @@
 
 #include <glm/glm.hpp>
 
+#include <vector>
+
 class Camera{   // Camera for OpenGL
   protected:
     glm::vec3 pos;
@@ -32,8 +34,9 @@ class VAO{
     GLuint vao;
     GLuint uni;
     int size;
+    glm::vec3 pos;
   public:
-    void init(GLfloat* vertices, int size, GLuint uniform);
+    void init(GLfloat* vertices, int size, GLuint uniform, glm::vec3 pos);
     void draw(glm::mat4 proj);
 };
 
@@ -42,13 +45,13 @@ class renderer{
     Camera* cam;
     bool run;
     GLuint prog;
-    VAO vao;
+    std::vector<VAO> vaos;
   public:
     renderer();
     ~renderer();
     void draw();
     bool is_open();
-    void add_mesh(GLfloat* verts, int size);
+    void add_mesh(GLfloat* verts, int size, glm::vec3 pos);
 };
 
 #endif

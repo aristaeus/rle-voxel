@@ -124,7 +124,9 @@ void renderer::draw(){
 
 
     glUseProgram(prog);
-    vao.draw(mvp);
+    for(int i = 0; i < vaos.size(); i++){
+        vaos[i].draw(mvp);
+    }
 
     window.display();
 }
@@ -135,9 +137,11 @@ renderer::is_open(){
 }
 
 void
-renderer::add_mesh(GLfloat* verts, int size){
+renderer::add_mesh(GLfloat* verts, int size, glm::vec3 pos){
     GLuint transform = glGetUniformLocation(prog, "transform");
-    vao.init(verts, size, transform);
+    VAO vao;
+    vao.init(verts, size, transform, pos);
+    vaos.push_back(vao);
 }
 
 glm::mat4
@@ -204,9 +208,10 @@ update(){
 }
 
 void VAO::
-init(GLfloat* vertices, int size, GLuint uniform){
+init(GLfloat* vertices, int size, GLuint uniform, glm::vec3 pos){
     uni = uniform;
     this->size = size;
+    this->pos = pos;
 
     /* gen buffer data */
     glGenBuffers(1, &vbo);
@@ -230,7 +235,7 @@ init(GLfloat* vertices, int size, GLuint uniform){
 void VAO::
 draw(glm::mat4 proj){
     glm::mat4 trans;
-    trans = glm::translate(trans, glm::vec3(0.0,0.0,0.0));
+    trans = glm::translate(trans, pos);
     
     // mvp stuff
     glm::mat4 mvp = proj * trans;

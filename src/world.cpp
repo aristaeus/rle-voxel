@@ -9,9 +9,10 @@ World::init(renderer* render){
 	               0, 0, 1, 1, 1,
 	               1, 1 };
 
-    for(int i = 0; i < 16; i++){
+    for(int i = 0; i < 9; i++){
         chunks[i].init(array,3);
         std::vector<glm::vec3> verts = chunks[i].less_naive();
-	    render->add_mesh((GLfloat*)verts.data(), 3*verts.size());
+        glm::vec3 pos ((i%3)*3, 0, (i/3)*3);
+	    render->add_mesh((GLfloat*)verts.data(), 3*verts.size(),pos);
     }
 }
