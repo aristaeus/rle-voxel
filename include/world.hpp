@@ -1,6 +1,7 @@
 #ifndef WORLD_HPP
 #define WORLD_HPP
 
+#include "component.hpp"
 #include "rle.hpp"
 
 class World{
@@ -8,7 +9,7 @@ class World{
     int dim;
 
     public:
-    void init(Renderer* render, int dim);
+    void init(Renderer* render, int dim, Game* game);
 };
 
 #endif

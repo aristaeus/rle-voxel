@@ -29,14 +29,16 @@ class FPSCam: public Camera{
     ~FPSCam() {};
 };
 
+class BaseComponent;
+
 class VAO{
     GLuint vbo;
     GLuint vao;
     GLuint uni;
     int size;
-    glm::vec3 pos;
+    BaseComponent* base;
   public:
-    void init(GLfloat* vertices, int size, GLuint uniform, glm::vec3 pos);
+    void init(GLfloat* vertices, int size, GLuint uniform, BaseComponent* base);
     void draw(glm::mat4 proj);
 };
 
@@ -51,7 +53,7 @@ class Renderer{
     ~Renderer();
     void draw();
     bool is_open();
-    void add_mesh(GLfloat* verts, int size, glm::vec3 pos);
+    void add_mesh(GLfloat* verts, int size, BaseComponent* base);
 };
 
 #endif

@@ -8,6 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "wrap.hpp"
+#include "component.hpp"
 
 GLuint load_shader(const char* filename, GLenum type){
     /* load source into memory */
@@ -137,10 +138,10 @@ Renderer::is_open(){
 }
 
 void
-Renderer::add_mesh(GLfloat* verts, int size, glm::vec3 pos){
+Renderer::add_mesh(GLfloat* verts, int size, BaseComponent* base){
     GLuint transform = glGetUniformLocation(prog, "transform");
     VAO vao;
-    vao.init(verts, size, transform, pos);
+    vao.init(verts, size, transform, base);
     vaos.push_back(vao);
 }
 
@@ -208,10 +209,10 @@ update(){
 }
 
 void VAO::
-init(GLfloat* vertices, int size, GLuint uniform, glm::vec3 pos){
+init(GLfloat* vertices, int size, GLuint uniform, BaseComponent* base){
     uni = uniform;
     this->size = size;
-    this->pos = pos;
+    this->base = base;
 
     /* gen buffer data */
     glGenBuffers(1, &vbo);
@@ -235,7 +236,7 @@ init(GLfloat* vertices, int size, GLuint uniform, glm::vec3 pos){
 void VAO::
 draw(glm::mat4 proj){
     glm::mat4 trans;
-    trans = glm::translate(trans, pos);
+    trans = glm::translate(trans,base->position);
     
     // mvp stuff
     glm::mat4 mvp = proj * trans;
