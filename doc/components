@@ -1,0 +1,18 @@
+# component
+
+component.* describes the component system used in <name> to seperate and manage the different systems in <name>.
+
+## Classes
+
+### BaseComponent
+#### Description
+This is the base component. It contains common data required by almost all other components, such as position or *.
+
+#### Functions
+
+### VAO
+#### Description
+This is a basic rendering component. It contains all the OpenGL required to render a mesh, provided during construction. It is managed by a GLProgram, which contains the OpenGL shaders etc.
+
+#### TODO
+- Better system for creating components and managing IDs
