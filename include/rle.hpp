@@ -33,6 +33,9 @@ class RLEChunk{
 	// slightly less basic meshing
 	std::vector<glm::vec3> less_naive();
 
+	// meshing!
+	std::vector<glm::vec3> gen_mesh();
+
 	// get a run length at an ID
 	IntervalNode get_rle(int i);
 

@@ -8,8 +8,8 @@ World::init(int dim, Game* game){
     this->dim = dim;
     this->game = game;
 
-    for(int i = 0; i < dim*dim; i++){
-        glm::vec3 pos ((i%dim)*dim, 0, (i/dim)*dim);
+    for(int i = 0; i < 3*3; i++){
+        glm::vec3 pos ((i%3)*dim, 0, (i/3)*dim);
 	    gen_chunk(pos,i);
     }
 }
@@ -32,7 +32,7 @@ World::gen_chunk(glm::vec3 pos, int id){
     }
 
     chunks[id].init((int*)chunk, dim);
-    std::vector<glm::vec3> verts = chunks[id].less_naive();
+    std::vector<glm::vec3> verts = chunks[id].gen_mesh();
     int comp_id = game->new_component(pos);
 	game->vaos.add_vao((GLfloat*)verts.data(), 3*verts.size(), comp_id);
 }

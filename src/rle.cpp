@@ -55,7 +55,6 @@ RLEChunk::init(int* array, int dim){
         if(array[i] == curr.type)
             continue;
 
-        // std::cout<<"new run at: "<<i<<"\n";
         curr.coord = i;
         curr.type = array[i];
         voxels[rle_count++] = curr;
@@ -76,8 +75,8 @@ RLEChunk::coord_conv(glm::vec3 in){
 glm::vec3
 RLEChunk::coord_conv(int in){
     int x = in%dim;
-    int y = ((in-x)%(dim*dim))/dim;
-    int z = ((in-x-y)%(dim*dim*dim)/(dim*dim));
+    int y = (in%(dim*dim))/dim;
+    int z = (in%(dim*dim*dim)/(dim*dim));
     return glm::vec3(x,y,z);
 }
 
@@ -125,6 +124,52 @@ RLEChunk::less_naive(){
         }
         // needs to still do something about final node
         // maybe add a "phantom node" after the last position?
+    }
+    return verts;
+}
+
+std::vector<glm::vec3>
+RLEChunk::gen_mesh(){
+    std::vector<glm::vec3> verts;
+
+    for(int i = 0; i < rle_count-1; i++){
+        if(voxels[i].type != 0){
+
+            // copies needed for safe modification
+            IntervalNode curr = voxels[i];
+            IntervalNode next = voxels[i+1];
+
+            // gen volume filling to end of the row
+            if(coord_conv(curr.coord).x != 0.0 && next.coord/dim > curr.coord/dim){
+                std::vector<glm::vec3> vol = gen_volume(
+                    coord_conv(curr.coord),
+                    coord_conv(curr.coord/dim*dim)+glm::vec3(dim-1,0,0));
+                verts.insert(verts.end(),vol.begin(),vol.end());
+                // set coord to the start of next row
+                curr.coord = curr.coord/dim*dim+dim;
+            }
+
+            // fill volume in between
+            if(next.coord/dim > curr.coord/dim){
+                std::vector<glm::vec3> vol = gen_volume(
+                    coord_conv(curr.coord),
+                    coord_conv((next.coord-dim)/dim*dim)+glm::vec3(dim-1,0,0));
+                verts.insert(verts.end(),vol.begin(),vol.end());
+                curr.coord = next.coord/dim*dim;
+            }
+
+            // don't create a volume at the start of a row
+            if(curr.coord != next.coord){
+                // generate remaining volume
+                std::vector<glm::vec3> vol = gen_volume(
+                    coord_conv(curr.coord),
+                    coord_conv(next.coord)-glm::vec3(1,0,0));
+                verts.insert(verts.end(),vol.begin(),vol.end());
+            }
+
+            // needs to still do something about final node
+            // maybe add a "phantom node" after the last position?
+        }
     }
     return verts;
 }
