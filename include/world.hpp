@@ -9,7 +9,7 @@ class World{
     int dim;
 
     public:
-    void init(Renderer* render, int dim, Game* game);
+    void init(int dim, Game* game);
 };
 
 #endif

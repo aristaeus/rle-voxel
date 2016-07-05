@@ -8,10 +8,14 @@
 int main(){
 	Renderer render;
 	Game game;
+	game.init(render.get_window());
 
 	World world;
-	world.init(&render, 3, &game);
+	world.init(3, &game);
 
-	while(render.is_open()) render.draw();
+	while(render.is_open()){
+	    render.draw();
+	    game.update();
+	}
 	return 0;
 }
