@@ -14,6 +14,7 @@ World::init(int dim, Game* game){
         chunks[i].init(array,dim);
         std::vector<glm::vec3> verts = chunks[i].less_naive();
         glm::vec3 pos ((i%dim)*dim, 0, (i/dim)*dim);
-	    game->add_mesh((GLfloat*)verts.data(), 3*verts.size(), pos);
+        int id = game->new_component(pos);
+	    game->vaos.add_vao((GLfloat*)verts.data(), 3*verts.size(), id);
     }
 }

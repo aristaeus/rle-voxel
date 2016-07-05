@@ -46,12 +46,16 @@ class VAO{
     void draw(glm::mat4 proj);
 };
 
+class Game;
+
 class GLProgram{
     Camera* cam;
+    Game* game;
     public:
-    std::vector<VAO> vaos;
+    std::map<int,VAO> vaos;
     GLuint prog;
-    void init(sf::Window* window);
+    void init(Game* game, sf::Window* window);
+    void add_vao(GLfloat* verts, int size, int id);
     void update();
     ~GLProgram();
 };
@@ -62,7 +66,7 @@ class Game{
     GLProgram vaos;
     void init(sf::Window* window);
     void update();
-    void add_mesh(GLfloat* verts, int size, glm::vec3 pos);
+    int new_component(glm::vec3 pos);
 };
 
 #endif

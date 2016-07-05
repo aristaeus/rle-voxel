@@ -2,7 +2,7 @@ CC=g++
 OUT=vox
 FILE=wrap rle main world component
 LIB=-lsfml-window -lsfml-system -lGL -lGLEW
-CXXFLAGS=-g -Wall -std=c++11
+CXXFLAGS=-g -Wall -Wextra -std=c++11
 BUILDIR=build/
 SRCDIR=src/
 INCDIR=include/

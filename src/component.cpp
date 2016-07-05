@@ -5,12 +5,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
 #include "component.hpp"
 
 void
 Game::init(sf::Window* window){
-    vaos.init(window);
+    vaos.init(this, window);
 }
 
 void
@@ -18,17 +17,13 @@ Game::update(){
     vaos.update();
 }
 
-void
-Game::add_mesh(GLfloat* verts, int size, glm::vec3 pos){
-    int i = base_components.size();
+int
+Game::new_component(glm::vec3 pos){
+    int id = base_components.size();
     BaseComponent base;
-    base_components.insert(std::pair<int,BaseComponent>(i,base));
-    base_components[i].position = pos;
-    
-    GLuint transform = glGetUniformLocation(vaos.prog,"transform");
-    VAO vao;
-    vao.init(verts, size, transform, &(base_components[i]));
-    vaos.vaos.push_back(vao);
+    base.position = pos;
+    base_components.insert(std::pair<int,BaseComponent>(id,base));
+    return id;
 }
 
 GLuint load_shader(const char* filename, GLenum type){
@@ -83,7 +78,9 @@ GLuint load_program(const char* vfile, const char* ffile){
 }
 
 void
-GLProgram::init(sf::Window* window){
+GLProgram::init(Game* game, sf::Window* window){
+    this->game = game;
+
     // OpenGL stuff
     glewInit();
 
@@ -111,9 +108,17 @@ void GLProgram::update(){
 
 
     glUseProgram(prog);
-    for(int i = 0; i < vaos.size(); i++){
+    for(uint i = 0; i < vaos.size(); i++){
         vaos[i].draw(mvp);
     }
+}
+
+void
+GLProgram::add_vao(GLfloat* verts, int size, int id){
+    GLuint transform = glGetUniformLocation(prog,"transform");
+    VAO vao;
+    vao.init(verts, size, transform, &(game->base_components[id]));
+    vaos.insert(std::pair<int,VAO>(id,vao));
 }
 
 GLProgram::~GLProgram(){
