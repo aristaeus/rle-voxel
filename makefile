@@ -1,12 +1,12 @@
 CC=g++
 OUT=vox
-FILE=wrap rle main world component
 LIB=-lsfml-window -lsfml-system -lGL -lGLEW
 CXXFLAGS=-g -Wall -Wextra -std=c++11
 BUILDIR=build/
 SRCDIR=src/
 INCDIR=include/
 
+FILE=$(notdir $(basename $(shell ls $(SRCDIR)*)))
 OBJ=$(addprefix $(BUILDIR),$(addsuffix .o, $(FILE)))
 
 all: $(OBJ)

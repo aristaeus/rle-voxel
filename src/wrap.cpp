@@ -7,7 +7,7 @@
 #include "component.hpp"
 
 
-Renderer::Renderer(){
+SFWindow::SFWindow(){
     run = true;
 
     sf::ContextSettings s;
@@ -21,11 +21,11 @@ Renderer::Renderer(){
     printf("GL: %d.%d\nAA: %d\nDB:%d\nSB: %d\n", s.majorVersion, s.minorVersion, s.antialiasingLevel, s.depthBits, s.stencilBits);
 }
 
-Renderer::~Renderer(){
+SFWindow::~SFWindow(){
 
 }
 
-void Renderer::draw(){
+void SFWindow::draw(){
     sf::Event event;
     while(window.pollEvent(event)){
         if(event.type == sf::Event::Closed){
@@ -48,11 +48,11 @@ void Renderer::draw(){
 }
 
 bool
-Renderer::is_open(){
+SFWindow::is_open(){
     return run;
 }
 
 sf::Window*
-Renderer::get_window(){
+SFWindow::get_window(){
     return &window;
 }

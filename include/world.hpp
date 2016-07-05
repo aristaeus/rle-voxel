@@ -1,8 +1,9 @@
 #ifndef WORLD_HPP
 #define WORLD_HPP
 
-#include "component.hpp"
 #include "rle.hpp"
+
+class Game;
 
 class World{
     RLEChunk chunks [16];

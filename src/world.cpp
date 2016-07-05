@@ -1,3 +1,4 @@
+#include "component.hpp"
 #include "world.hpp"
 
 void

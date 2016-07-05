@@ -6,7 +6,7 @@
 #include "wrap.hpp"
 
 int main(){
-	Renderer render;
+	SFWindow render;
 	Game game;
 	game.init(render.get_window());
 
