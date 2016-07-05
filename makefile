@@ -1,6 +1,6 @@
 CC=g++
 OUT=vox
-LIB=-lsfml-window -lsfml-system -lGL -lGLEW
+LIB=-lsfml-window -lsfml-system -lGL -lGLEW -lnoise
 CXXFLAGS=-g -Wall -Wextra -std=c++11
 BUILDIR=build/
 SRCDIR=src/

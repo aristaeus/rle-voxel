@@ -1,3 +1,4 @@
+#include <iostream>
 #include <random>
 
 #include "component.hpp"
@@ -8,8 +9,9 @@ World::init(int dim, Game* game){
     this->dim = dim;
     this->game = game;
 
-    for(int i = 0; i < 3*3; i++){
-        glm::vec3 pos ((i%3)*dim, 0, (i/3)*dim);
+    int num_chunk = 3;
+    for(int i = 0; i < num_chunk*num_chunk; i++){
+        glm::vec3 pos ((i%num_chunk)*dim, 0, (i/num_chunk)*dim);
 	    gen_chunk(pos,i);
     }
 }
@@ -23,7 +25,10 @@ World::gen_chunk(glm::vec3 pos, int id){
     for(int x = 0; x < dim; x++){
         for(int z = 0; z < dim; z++){
             // int height = 4;
-            int height = dist(mt);
+            // int height = dist(mt);
+
+            // WHY IS IT BACKWARDS
+            float height = terrain_noise.get_value(pos+glm::vec3(z,0,x));
             for(int y = 0; y < dim; y++){
                 if(y < height) chunk[x][y][z] = 1;
                 else chunk[x][y][z] = 0;

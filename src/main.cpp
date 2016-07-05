@@ -11,7 +11,7 @@ int main(){
 	game.init(render.get_window());
 
 	World world;
-	world.init(3, &game);
+	world.init(16, &game);
 
 	while(render.is_open()){
 	    render.draw();
