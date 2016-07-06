@@ -7,10 +7,14 @@
 void
 Game::init(sf::Window* window){
     vaos.init(this, window);
+    chunks.init(16,this);
+    // help me
+    player = base_components.find(0);
 }
 
 void
 Game::update(){
+    chunks.update_chunks();
     vaos.update();
 }
 

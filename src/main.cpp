@@ -10,9 +10,6 @@ int main(){
 	Game game;
 	game.init(render.get_window());
 
-	World world;
-	world.init(16, &game);
-
 	while(render.is_open()){
 	    render.draw();
 	    game.update();

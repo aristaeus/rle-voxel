@@ -70,6 +70,7 @@ GLProgram::init(Game* game, sf::Window* window){
     int id = game->new_component(glm::vec3(0,0,0));
     game->player = game->base_components.find(id);
     cam = new FPSCam(window, game->base_components.find(id));
+    std::cout<<"id: "<<id<<"\n";
 }
 
 void GLProgram::update(){
