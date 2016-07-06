@@ -18,6 +18,7 @@ class BaseComponent{
 class Game{
     public:
     std::map<int,BaseComponent> base_components;
+    std::map<int,BaseComponent>::iterator player;
     GLProgram vaos;
     World chunks;
     void init(sf::Window* window);

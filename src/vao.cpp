@@ -67,7 +67,9 @@ GLProgram::init(Game* game, sf::Window* window){
     
     glEnable(GL_DEPTH_TEST);
 
-    cam = new FPSCam(window);
+    int id = game->new_component(glm::vec3(0,0,0));
+    game->player = game->base_components.find(id);
+    cam = new FPSCam(window, game->base_components.find(id));
 }
 
 void GLProgram::update(){
@@ -86,8 +88,8 @@ void GLProgram::update(){
 
 
     glUseProgram(prog);
-    for(uint i = 0; i < vaos.size(); i++){
-        vaos[i].draw(mvp);
+    for(auto it = vaos.begin(); it != vaos.end(); it++){
+        it->second.draw(mvp);
     }
 }
 
@@ -95,7 +97,7 @@ void
 GLProgram::add_vao(GLfloat* verts, int size, int id){
     GLuint transform = glGetUniformLocation(prog,"transform");
     VAO vao;
-    vao.init(verts, size, transform, &(game->base_components[id]));
+    vao.init(verts, size, transform, game->base_components.find(id));
     vaos.insert(std::pair<int,VAO>(id,vao));
 }
 
@@ -106,11 +108,12 @@ GLProgram::~GLProgram(){
 glm::mat4
 Camera::get_cam(){
     this->update();
-    return glm::lookAt(pos, target, up);
+    return glm::lookAt(base->second.position, target, up);
 }
 
-FPSCam::FPSCam(sf::Window* win){
-    pos = glm::vec3(0.0,0.0,3.0);
+FPSCam::FPSCam(sf::Window* win, std::map<int,BaseComponent>::iterator it){
+    base = it;
+    base->second.position = glm::vec3(0.0,0.0,3.0);
     target = glm::vec3(0.0,0.0,0.0);
     up = glm::vec3(0.0,1.0,0.0);
 
@@ -141,36 +144,36 @@ update(){
 
     // update position from keyboard input
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-        pos.x += 1*dt*sin(rotx);
-        pos.z += 1*dt*cos(rotx);
+        base->second.position.x += 1*dt*sin(rotx);
+        base->second.position.z += 1*dt*cos(rotx);
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
-        pos.x -= 1*dt*sin(rotx);
-        pos.z -= 1*dt*cos(rotx);
+        base->second.position.x -= 1*dt*sin(rotx);
+        base->second.position.z -= 1*dt*cos(rotx);
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-        pos.x += 1*dt*cos(rotx);
-        pos.z -= 1*dt*sin(rotx);
+        base->second.position.x += 1*dt*cos(rotx);
+        base->second.position.z -= 1*dt*sin(rotx);
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-        pos.x -= 1*dt*cos(rotx);
-        pos.z += 1*dt*sin(rotx);
+        base->second.position.x -= 1*dt*cos(rotx);
+        base->second.position.z += 1*dt*sin(rotx);
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)){
-        pos.y += 0.1;
+        base->second.position.y += 0.1;
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)){
-        pos.y -= 0.1;
+        base->second.position.y -= 0.1;
     }
 
-    target = glm::vec3(pos.x+sin(rotx), pos.y+sin(roty), pos.z+cos(rotx));
+    target = glm::vec3(base->second.position.x+sin(rotx), base->second.position.y+sin(roty), base->second.position.z+cos(rotx));
 }
 
 void VAO::
-init(GLfloat* vertices, int size, GLuint uniform, BaseComponent* base){
+init(GLfloat* vertices, int size, GLuint uniform, std::map<int,BaseComponent>::iterator it){
     uni = uniform;
     this->size = size;
-    this->base = base;
+    base = it;
 
     /* gen buffer data */
     glGenBuffers(1, &vbo);
@@ -194,7 +197,7 @@ init(GLfloat* vertices, int size, GLuint uniform, BaseComponent* base){
 void VAO::
 draw(glm::mat4 proj){
     glm::mat4 trans;
-    trans = glm::translate(trans,base->position);
+    trans = glm::translate(trans,base->second.position);
     
     // mvp stuff
     glm::mat4 mvp = proj * trans;

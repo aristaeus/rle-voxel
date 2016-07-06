@@ -10,9 +10,11 @@
 #include <SFML/OpenGL.hpp>
 #include <SFML/Window.hpp>
 
+class BaseComponent;
+
 class Camera{   // Camera for OpenGL
   protected:
-    glm::vec3 pos;
+    std::map<int,BaseComponent>::iterator base;
     glm::vec3 target;
     glm::vec3 up;
     virtual void update() {};   // Update pos target and up
@@ -27,20 +29,18 @@ class FPSCam: public Camera{
     double roty;
     sf::Window* window;
   public:
-    FPSCam(sf::Window* win);
+    FPSCam(sf::Window* win, std::map<int,BaseComponent>::iterator it);
     ~FPSCam() {};
 };
-
-class BaseComponent;
 
 class VAO{
     GLuint vbo;
     GLuint vao;
     GLuint uni;
     int size;
-    BaseComponent* base;
+    std::map<int,BaseComponent>::iterator base;
   public:
-    void init(GLfloat* vertices, int size, GLuint uniform, BaseComponent* base);
+    void init(GLfloat* vertices, int size, GLuint uniform, std::map<int,BaseComponent>::iterator it);
     void draw(glm::mat4 proj);
 };
 
